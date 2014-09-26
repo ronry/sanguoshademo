@@ -14,13 +14,18 @@
 
 	<dependencyManagement>
 		<dependencies>
-			
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>18.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 
 	<modules>
 		<module>core</module>
+		<module>console</module>
 	</modules>
 
 </project>

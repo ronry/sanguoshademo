@@ -6,8 +6,8 @@ import com.ronry.sanguosha.event.Event;
 
 public interface Judger {
 
-    Event sync(Event event, List<Player> players);
+    Event sync(Event event, List<AbstractPlayer> players);
 
-    Event parallelSync(Event event, List<Player> players);
+    Event parallelSync(Event event, List<AbstractPlayer> players);
 
 }

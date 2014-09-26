@@ -8,15 +8,20 @@
 		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ronry</groupId>
-	<artifactId>sanguosha-core</artifactId>
+	<artifactId>sanguosha-console</artifactId>
 	<version>1.0.0</version>
-	<name>Ronry san suo sha demo core</name>
+	<name>Ronry san suo sha demo console palyer</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.ronry</groupId>
+			<artifactId>sanguosha-core</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

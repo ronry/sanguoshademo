@@ -2,14 +2,24 @@ package com.ronry.sanguosha;
 
 import java.util.List;
 
-public interface Role {
+public abstract class Role {
 
-    public void prepareGrabCard(Player currentPalyer, List<Player> players, CardManager cardManager);
+    protected String name;
 
-    public void grabCard(Player currentPalyer, List<Player> players, CardManager cardManager);
+    public abstract void prepareGrabCard(AbstractPlayer currentPalyer, List<AbstractPlayer> players, CardManager cardManager);
 
-    public void paly(Player currentPalyer, List<Player> players, CardManager cardManager);
+    public abstract void grabCard(AbstractPlayer currentPalyer, List<AbstractPlayer> players, CardManager cardManager);
 
-    public void postGrabCard(Player currentPalyer, List<Player> players, CardManager cardManager);
+    public abstract void paly(AbstractPlayer currentPalyer, List<AbstractPlayer> players, CardManager cardManager);
+
+    public abstract void postGrabCard(AbstractPlayer currentPalyer, List<AbstractPlayer> players, CardManager cardManager);
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }

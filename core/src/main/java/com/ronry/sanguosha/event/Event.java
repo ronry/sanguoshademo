@@ -1,18 +1,25 @@
 package com.ronry.sanguosha.event;
 
-import com.ronry.sanguosha.Player;
+import com.google.common.util.concurrent.SettableFuture;
+import com.ronry.sanguosha.AbstractPlayer;
 import com.ronry.sanguosha.card.Card;
 import com.ronry.sanguosha.enums.EventType;
 
-public class Event {
+public class Event<T> {
 
     private EventType type;
 
-    private Player    triggerPlayer;
+    private AbstractPlayer    triggerPlayer;
 
-    private Player    targerPalyer;
+    private AbstractPlayer    targerPalyer;
 
     private Card      card;
+
+    private SettableFuture<T> future = SettableFuture.create(); ;
+
+    public SettableFuture<T> getFuture() {
+        return future;
+    }
 
     public EventType getType() {
         return type;
@@ -22,19 +29,19 @@ public class Event {
         this.type = type;
     }
 
-    public Player getTriggerPlayer() {
+    public AbstractPlayer getTriggerPlayer() {
         return triggerPlayer;
     }
 
-    public void setTriggerPlayer(Player triggerPlayer) {
+    public void setTriggerPlayer(AbstractPlayer triggerPlayer) {
         this.triggerPlayer = triggerPlayer;
     }
 
-    public Player getTargerPalyer() {
+    public AbstractPlayer getTargerPalyer() {
         return targerPalyer;
     }
 
-    public void setTargerPalyer(Player targerPalyer) {
+    public void setTargerPalyer(AbstractPlayer targerPalyer) {
         this.targerPalyer = targerPalyer;
     }
 
