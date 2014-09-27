@@ -1,6 +1,10 @@
 package com.ronry.sanguosha.event;
 
-public class ShowEvent extends Event {
+public class ShowEvent extends Event<Void> {
+
+    public ShowEvent(){
+
+    }
 
     public ShowEvent(String msg){
         super();

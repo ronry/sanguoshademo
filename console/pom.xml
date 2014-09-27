@@ -22,10 +22,6 @@
 			<artifactId>sanguosha-core</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-		</dependency>
 	</dependencies>
 
 </project>

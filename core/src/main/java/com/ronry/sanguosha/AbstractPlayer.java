@@ -1,15 +1,20 @@
 package com.ronry.sanguosha;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Queues.newLinkedBlockingDeque;
+
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import com.ronry.sanguosha.card.Card;
 import com.ronry.sanguosha.enums.Identity;
 import com.ronry.sanguosha.event.Event;
+import com.ronry.sanguosha.event.GetCardEvent;
 import com.ronry.sanguosha.event.handler.EventHandlerManager;
 
 public abstract class AbstractPlayer {
+
+    protected String                name;
 
     private boolean             alive = true;
 
@@ -21,25 +26,23 @@ public abstract class AbstractPlayer {
 	
 	private List<AbstractPlayer> anotherPlays;
 	
-    private List<PlayStrategy>      cards;
+    private List<Card>              cards = newArrayList();
 
     private CardManager  cardManager;
 
     private AbstractGame         game;
 
-    private Judger              judger;
-
     private EventHandlerManager eventHandlerManager;
 
-    private Queue<Event>        eventQueue = new LinkedBlockingDeque<Event>();
+    protected final Queue<Event<?>> queue = newLinkedBlockingDeque();
 
     public abstract Card askSha();
 
-    public abstract Event next();
+    public abstract Event<?> next();
 
-    public abstract void fireEvent(Event event);
+    public abstract void fireEvent(Event<?> event);
 
-    public abstract void show(Event event);
+    public abstract void show(Event<?> event);
 
     public abstract Role selectRole(List<Role> candidators);
 
@@ -52,7 +55,7 @@ public abstract class AbstractPlayer {
     }
 
     public void play() {
-        Event event;
+        Event<?> event;
         while ((event = this.next()) != null) {
             
         }
@@ -91,12 +94,13 @@ public abstract class AbstractPlayer {
         this.role = role;
     }
 
-    public List<PlayStrategy> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
-    public void setCards(List<PlayStrategy> cards) {
-        this.cards = cards;
+    public void addCards(List<Card> cards) {
+        fireEvent(new GetCardEvent(cards));
+        this.cards.addAll(cards);
     }
 
     public CardManager getCardManager() {
@@ -113,14 +117,6 @@ public abstract class AbstractPlayer {
 
     public void setEventHandlerManager(EventHandlerManager eventHandlerManager) {
         this.eventHandlerManager = eventHandlerManager;
-    }
-
-    public Judger getJudger() {
-        return judger;
-    }
-
-    public void setJudger(Judger judger) {
-        this.judger = judger;
     }
 
     public boolean isAlive() {
@@ -146,5 +142,14 @@ public abstract class AbstractPlayer {
     public void setMaster(boolean master) {
         this.master = master;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
 }

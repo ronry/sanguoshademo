@@ -1,13 +1,14 @@
 package com.ronry.sanguosha;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.ronry.sanguosha.event.Event;
 
 public interface Judger {
 
-    Event sync(Event event, List<AbstractPlayer> players);
+    <T> List<T> sync(Event<T> event, Collection<AbstractPlayer> players);
 
-    Event parallelSync(Event event, List<AbstractPlayer> players);
+    <T> List<T> parallelSync(Event<T> event, Collection<AbstractPlayer> players);
 
 }

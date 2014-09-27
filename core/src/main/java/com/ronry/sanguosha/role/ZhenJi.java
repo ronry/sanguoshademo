@@ -10,10 +10,10 @@ import com.ronry.sanguosha.skill.Skill;
 
 public class ZhenJi extends BaseRole {
 
-    private boolean simayiIn;
-
     public ZhenJi(){
         super.name = "甄姬";
+        super.baseCardCnt = 3;
+        super.baseHp = 3;
     }
 
     @Override
@@ -27,10 +27,6 @@ public class ZhenJi extends BaseRole {
          * 如果是黑桃 currentPalyer.getCards().add(nextCard); // 否则跳出循环 }
          */
 
-    }
-
-    public void setSimayiIn(boolean simayiIn) {
-        this.simayiIn = simayiIn;
     }
 
     public static class LuoShenEvent extends SkillEvent implements Changeable {

@@ -2,9 +2,8 @@ package com.ronry.sanguosha.event.handler;
 
 import com.ronry.sanguosha.AbstractPlayer;
 import com.ronry.sanguosha.event.Event;
-import com.ronry.sanguosha.event.EventResult;
 
-public interface EventHandler {
+public interface EventHandler<T extends Event<?>> {
 
-    EventResult doEventFired(AbstractPlayer currentPalyer, Event event);
+    void handle(AbstractPlayer currentPalyer, T event);
 }

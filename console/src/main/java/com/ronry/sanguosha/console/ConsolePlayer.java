@@ -1,47 +1,49 @@
 package com.ronry.sanguosha.console;
 
-import static com.google.common.collect.Queues.newLinkedBlockingDeque;
-
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
 
 import com.ronry.sanguosha.AbstractGame;
 import com.ronry.sanguosha.AbstractPlayer;
 import com.ronry.sanguosha.Role;
 import com.ronry.sanguosha.card.Card;
+import com.ronry.sanguosha.console.event.handler.ConsoleEventHandlerManager;
+import com.ronry.sanguosha.console.helper.ConsoleHelper;
 import com.ronry.sanguosha.enums.Identity;
 import com.ronry.sanguosha.event.Event;
-import com.ronry.sanguosha.event.SelectRoleEvent;
-import com.ronry.sanguosha.event.ShowEvent;
+import com.ronry.sanguosha.event.handler.EventHandlerManager;
 
 
 public class ConsolePlayer extends AbstractPlayer {
     
     private Scanner              scanner = new Scanner(System.in);
 
-    private final Queue<Event> queue   = newLinkedBlockingDeque();
+    private EventHandlerManager eventHandlerManager;
 
-    public ConsolePlayer(String name, Identity identity, AbstractGame game){
+    public ConsolePlayer(String name, Identity identity, AbstractGame game) throws Exception{
         super();
+        super.setName(name);
         super.setIdentity(identity);
         super.setGame(game);
+        eventHandlerManager = new ConsoleEventHandlerManager();
         new Thread(new PlayerThread(this), name).start();
     }
 
     @Override
-    public void fireEvent(Event event) {
+    public void fireEvent(Event<?> event) {
         queue.add(event);
     }
 
     @Override
     public Role selectRole(List<Role> candidators) {
-        StringBuffer sb = new StringBuffer(Thread.currentThread().getName() + ":请按数字选择武将：");
+        StringBuffer sb = new StringBuffer("请按数字选择武将：");
         for (int i = 1; i <= candidators.size(); i++) {
             sb.append(i + ". " + candidators.get(i - 1).getName() + "  ");
         }
-        System.out.println(sb.toString());
-        return candidators.get(Integer.parseInt(scanner.nextLine()) - 1);
+        ConsoleHelper.out(sb.toString());
+        Role role = candidators.get(Integer.parseInt(scanner.nextLine()) - 1);
+        super.setRole(role);
+        return role;
     }
 
     @Override
@@ -51,13 +53,13 @@ public class ConsolePlayer extends AbstractPlayer {
     }
 
     @Override
-    public Event next() {
+    public Event<?> next() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void show(Event event) {
+    public void show(Event<?> event) {
         // TODO Auto-generated method stub
 
     }
@@ -78,21 +80,11 @@ public class ConsolePlayer extends AbstractPlayer {
                 Event<?> event = queue.poll();
                 if (event == null) {
                     try {
-                        // System.out.println(Thread.currentThread().getName());
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
                     }
-                }
-
-                if (event instanceof ShowEvent) {
-                    ShowEvent showEvent = (ShowEvent) event;
-                    System.out.println(Thread.currentThread().getName() + ":" + showEvent.getMsg());
-                } else if (event instanceof SelectRoleEvent) {
-                    SelectRoleEvent sEvent = (SelectRoleEvent) event;
-                    Role role = player.selectRole(sEvent.getCandidators());
-                    sEvent.getFuture().set(role);
+                } else {
+                    eventHandlerManager.getHandler(event.getClass()).handle(player, event);
                 }
 
             }

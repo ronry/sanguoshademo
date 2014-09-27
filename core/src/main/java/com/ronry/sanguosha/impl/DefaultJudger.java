@@ -1,8 +1,11 @@
 package com.ronry.sanguosha.impl;
 
-import java.util.ArrayList;
+import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+
+import net.sf.cglib.beans.BeanCopier;
 
 import com.ronry.sanguosha.AbstractPlayer;
 import com.ronry.sanguosha.Judger;
@@ -11,37 +14,37 @@ import com.ronry.sanguosha.event.Event;
 
 public class DefaultJudger implements Judger {
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Event parallelSync(final Event event, final List<AbstractPlayer> players) {
-        final CountDownLatch latch = new CountDownLatch(players.size());
-
-        final List<Event> result = new ArrayList<Event>();
-        for (int i = 0; i < players.size(); i++) {
-            final AbstractPlayer player = players.get(i);
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    /*
-                     * EventResult eventResult = player.fireEvent(event); if (eventResult != null) { // FIXME 回传结果 }
-                     */
-
-                    latch.countDown();
-                }
-
-            });
+    public <T> List<T> parallelSync(final Event<T> event, final Collection<AbstractPlayer> players) {
+        BeanCopier copier = BeanCopier.create(event.getClass(), event.getClass(), false);
+        List<T> result = newArrayList();
+        List<Event<T>> events = newArrayList();
+        for (final AbstractPlayer player : players) {
+            Event<T> newEvent;
+            try {
+                newEvent = event.getClass().newInstance();
+                events.add(newEvent);
+                copier.copy(event, newEvent, null);
+                player.fireEvent(newEvent);
+            } catch (InstantiationException | IllegalAccessException e) {
+                System.out.println(e);
+            }
         }
 
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
+        for (final Event<T> newEvent : events) {
+            try {
+                result.add(newEvent.getFuture().get());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
 
-        return result.get(0);
+        return result;
     }
 
     @Override
-    public Event sync(Event event, List<AbstractPlayer> players) {
+    public <T> List<T> sync(Event<T> event, Collection<AbstractPlayer> players) {
         return null;
     }
 

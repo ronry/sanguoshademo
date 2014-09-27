@@ -53,4 +53,8 @@ public class Event<T> {
         this.card = card;
     }
 
+    public void setFuture(SettableFuture<T> future) {
+        this.future = future;
+    }
+
 }

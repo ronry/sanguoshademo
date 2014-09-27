@@ -12,6 +12,8 @@ public class ZhuGeLiang extends BaseRole {
 
     public ZhuGeLiang(){
         super.name = "诸葛亮";
+        super.baseCardCnt = 3;
+        super.baseHp = 3;
     }
 
     @Override

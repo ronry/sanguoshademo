@@ -1,5 +1,7 @@
 package com.ronry.sanguosha.card;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.ronry.sanguosha.PlayStrategy;
 import com.ronry.sanguosha.enums.CardVariety;
 
@@ -28,6 +30,11 @@ abstract public class Card extends PlayStrategy {
 
     public void setVariety(CardVariety variety) {
         this.variety = variety;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

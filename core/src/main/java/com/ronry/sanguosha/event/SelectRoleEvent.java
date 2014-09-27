@@ -8,6 +8,10 @@ public class SelectRoleEvent extends Event<Role> {
 
     private List<Role> candidators;
 
+    public SelectRoleEvent(){
+
+    }
+
     public SelectRoleEvent(List<Role> candidators){
         super();
         this.candidators = candidators;
